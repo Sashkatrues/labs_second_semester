@@ -7,7 +7,7 @@ void InputSize(int32_t& size)
 	std::cin >> size;
 	if (size <= 0)
 	{
-		throw std::invalid_argument("Wrong size\n");
+		throw std::invalid_argument("Impossible to complete. Wrong size\n");
 	}
 }
 
@@ -36,7 +36,7 @@ void Task(int32_t size, char type)
 			std::cout << "Sum of elements = " << SumPositiveElements(array2, size) << '\n';
 			try
 			{
-				std::cout << "Multiplication = " << MultiplicationOfElements(array2, size) << '\n';
+				std::cout << "Multiplication = " << MultiplicationElements(array2, size) << '\n';
 			}
 			catch (std::domain_error& e) { std::cout << e.what(); }
 			BubbleSort(array2, size);
@@ -47,13 +47,24 @@ void Task(int32_t size, char type)
 		break;
 	case '2':
 		InputChoose(choose);
-		ChooseInputingArray(array, size, choose);
-		system("cls");
-		PrintArray(array, size);
-		DeleteArray(array);
+		try
+		{
+			ChooseInputingArray(array, size, choose);
+			PrintArray(array, size);
+			std::cout << "Count of different elements = " << CountDifferentElements(array, size) << '\n';
+			try
+			{
+				std::cout << "Multiplication = " << MultiplicationElements(array, size) << '\n';
+			}
+			catch (std::domain_error& e) { std::cout << e.what(); }
+			BubbleSort(array, size);
+			PrintArray(array, size);
+			DeleteArray(array);
+		}
+		catch (std::invalid_argument& e) { std::cout << e.what(); }
 		break;
 	default:
-		throw std::invalid_argument("Wrong type\n");
+		throw std::invalid_argument("Impossible to complete. Wrong type\n");
 		break;
 	}
 }
@@ -141,13 +152,13 @@ int32_t IndexOfLastMinElement(double* array, int32_t size)
 	return index;
 }
 
-double MultiplicationOfElements(double* array, int32_t size)
+double MultiplicationElements(double* array, int32_t size)
 {
 	int32_t indexMax{ IndexOfFirstMaxElement(array, size) };
 	int32_t indexMin{ IndexOfLastMinElement(array, size) };
 	if (indexMin - indexMax - 1 <= 0)
 	{
-		throw std::domain_error("Impossible to complete. Received an interval that doesn't match the condition\n");
+		throw std::domain_error("Impossible to complete multiplication. Received an interval that doesn't match the condition\n");
 	}
 	else
 	{
@@ -169,6 +180,81 @@ void BubbleSort(double*& array, int32_t size)
 			if (array[j] < array[j + 2])
 			{
 				std::swap(array[j], array[j + 2]);
+			}
+		}
+	}
+}
+
+
+int32_t CountDifferentElements(int32_t* array, int32_t size)
+{
+	int32_t count{};
+
+	for (size_t i{}; i < size; ++i)
+	{
+		bool isUnique{true};
+
+		for (size_t j{}; j < i; ++j) {
+			if (array[i] == array[j]) {
+				isUnique = false;
+				break;
+			}
+		}
+
+		if (isUnique)
+		{
+			++count;
+		}
+	}
+
+	return count;
+}
+
+
+int32_t IndexOfMaxElement(int32_t* array, int32_t size)
+{
+	int32_t max{ abs(array[0]) };
+	int32_t index{};
+	for (int32_t i{ 1 }; i < size; ++i)
+	{
+		if (max <= abs(array[i]))
+		{
+			max = abs(array[i]);
+			index = i;
+		}
+	}
+	return index;
+}
+
+
+int64_t MultiplicationElements(int32_t* array, int32_t size)
+{
+	int32_t indexMax{ IndexOfMaxElement(array, size) };
+	if (indexMax == size - 1)
+	{
+		throw std::domain_error("Impossible to complete multiplication. Location of the element doesn't match the condition\n");
+	}
+	else
+	{
+		double multiplication{ 1 };
+		for (int32_t i{ indexMax + 1 }; i < size; ++i)
+		{
+			multiplication *= array[i];
+		}
+		return multiplication;
+	}
+}
+
+
+void BubbleSort(int32_t*& array, int32_t size)
+{
+	for (size_t i{}; i < size; ++i)
+	{
+		for (size_t j{}; j < size - i - 1; ++j)
+		{
+			if (array[j] >= 0 && array[j + 1] < 0)
+			{
+				std::swap(array[j], array[j + 1]);
 			}
 		}
 	}

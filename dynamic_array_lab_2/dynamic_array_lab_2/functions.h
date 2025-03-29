@@ -39,7 +39,7 @@ void InputInterval(Type& firstElement, Type& lastElement)
 	std::cin >> lastElement;
 	if (firstElement >= lastElement)
 	{
-		throw std::invalid_argument("Wrong interval\n");
+		throw std::invalid_argument("Impossible to complete. Wrong interval\n");
 	}
 }
 
@@ -66,7 +66,7 @@ void ChooseInputingArray(Type*& array, int32_t size, char chouse)
 		FillArray(array, size, firstElement, lastElement);
 		break;
 	default:
-		throw std::invalid_argument("Wrong chouse\n");
+		throw std::invalid_argument("Impossible to complete. Wrong chouse\n");
 		break;
 	}
 }
@@ -91,7 +91,12 @@ void DeleteArray(Type*& array)
 
 
 double SumPositiveElements(double*, int32_t);
-double MultiplicationOfElements(double*, int32_t);
+double MultiplicationElements(double*, int32_t);
 void BubbleSort(double*&, int32_t);
+int32_t CountDifferentElements(int32_t*, int32_t);
+int32_t IndexOfMaxElement(int32_t*, int32_t);
+int64_t MultiplicationElements(int32_t*, int32_t);
+void BubbleSort(int32_t*&, int32_t);
+
 
 #endif
