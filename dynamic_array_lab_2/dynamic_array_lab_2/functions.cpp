@@ -7,7 +7,7 @@ void InputSize(int32_t& size)
 	std::cin >> size;
 	if (size <= 0)
 	{
-		throw std::invalid_argument("wrong size\n");
+		throw std::invalid_argument("Wrong size\n");
 	}
 }
 
@@ -22,36 +22,47 @@ void InputTask(char& type)
 
 void Task(int32_t size, char type)
 {
-	char chouse{};
+	char choose{};
 	int32_t* array = nullptr;
 	double* array2 = nullptr;
 	switch (type)
 	{
 	case '1':
-		InputChouse(chouse);
-		ChouseInputingArray(array2, size, chouse);
-		//system("cls");
-		PrintArray(array2, size);
-		DeleteArray(array2);
+		InputChoose(choose);
+		try
+		{
+			ChooseInputingArray(array2, size, choose);
+			PrintArray(array2, size);
+			std::cout << "Sum of elements = " << SumPositiveElements(array2, size) << '\n';
+			try
+			{
+				std::cout << "Multiplication = " << MultiplicationOfElements(array2, size) << '\n';
+			}
+			catch (std::domain_error& e) { std::cout << e.what(); }
+			BubbleSort(array2, size);
+			PrintArray(array2, size);
+			DeleteArray(array2);
+		}
+		catch (std::invalid_argument& e) { std::cout << e.what(); }
 		break;
 	case '2':
-		InputChouse(chouse);
-		ChouseInputingArray(array, size, chouse);
-		/*system("cls");*/
+		InputChoose(choose);
+		ChooseInputingArray(array, size, choose);
+		system("cls");
 		PrintArray(array, size);
 		DeleteArray(array);
 		break;
 	default:
-		throw std::invalid_argument("wrong type\n");
+		throw std::invalid_argument("Wrong type\n");
 		break;
 	}
 }
 
 
-void InputChouse(char& chouse)
+void InputChoose(char& choose)
 {
 	std::cout << "Input 'h' - by hand or 'r' - by random\n";
-	std::cin >> chouse;
+	std::cin >> choose;
 
 }
 
@@ -83,5 +94,82 @@ void FillArray(double* array, int32_t size, double firstElement, double lastElem
 	for (size_t i{}; i < size; ++i)
 	{
 		array[i] = static_cast<double>(rand()) / RAND_MAX * (lastElement - firstElement) + firstElement;
+	}
+}
+
+
+double SumPositiveElements(double* array, int32_t size)
+{
+	double sum{};
+	for (size_t i{}; i < size; ++i)
+	{
+		if (array[i] >= 0)
+		{
+			sum += array[i];
+		}
+	}
+	return sum;
+}
+
+int32_t IndexOfFirstMaxElement(double* array, int32_t size)
+{
+	double max{ abs(array[0]) };
+	int32_t index{};
+	for (int32_t i{1}; i < size; ++i)
+	{
+		if (max < abs(array[i]))
+		{
+			max = abs(array[i]);
+			index = i;
+		}
+	}
+	return index;
+}
+
+int32_t IndexOfLastMinElement(double* array, int32_t size)
+{
+	double min{ abs(array[0]) };
+	int32_t index{};
+	for (int32_t i{1}; i < size ; ++i)
+	{
+		if (min >= abs(array[i]))
+		{
+			min = abs(array[i]);
+			index = i;
+		}
+	}
+	return index;
+}
+
+double MultiplicationOfElements(double* array, int32_t size)
+{
+	int32_t indexMax{ IndexOfFirstMaxElement(array, size) };
+	int32_t indexMin{ IndexOfLastMinElement(array, size) };
+	if (indexMin - indexMax - 1 <= 0)
+	{
+		throw std::domain_error("Impossible to complete. Received an interval that doesn't match the condition\n");
+	}
+	else
+	{
+		double multiplication{1};
+		for (int32_t i{ indexMax + 1 }; i < indexMin; ++i)
+		{
+			multiplication *= array[i];
+		}
+		return multiplication;
+	}
+}
+
+void BubbleSort(double*& array, int32_t size)
+{
+	for (size_t i{}; i < size; i += 2)
+	{
+		for (size_t j{}; j < size - 2; j += 2)
+		{
+			if (array[j] < array[j + 2])
+			{
+				std::swap(array[j], array[j + 2]);
+			}
+		}
 	}
 }

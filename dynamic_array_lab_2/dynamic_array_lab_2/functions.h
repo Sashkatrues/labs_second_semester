@@ -16,12 +16,13 @@ void CreateArray(double*& array, int32_t size);
 
 void InputTask(char&);
 void Task(int32_t, char);
-void InputChouse(char&);
+void InputChoose(char&);
 
 
 template <class Type>
 void InputArray(Type* array, int32_t size)
 {
+	std::cout << "Input elements of array\n";
 	for (size_t i{}; i < size; ++i)
 	{
 		std::cin >> array[i];
@@ -36,6 +37,10 @@ void InputInterval(Type& firstElement, Type& lastElement)
 	std::cin >> firstElement;
 	std::cout << "Input last element in interval\n";
 	std::cin >> lastElement;
+	if (firstElement >= lastElement)
+	{
+		throw std::invalid_argument("Wrong interval\n");
+	}
 }
 
 
@@ -44,7 +49,7 @@ void FillArray(double*, int32_t, double, double);
 
 
 template <class Type>
-void ChouseInputingArray(Type*& array, int32_t size, char chouse)
+void ChooseInputingArray(Type*& array, int32_t size, char chouse)
 {
 	Type firstElement{};
 	Type lastElement{};
@@ -53,6 +58,7 @@ void ChouseInputingArray(Type*& array, int32_t size, char chouse)
 	case 'h':
 		CreateArray(array, size);
 		InputArray(array, size);
+		system("cls");
 		break;
 	case 'r':
 		CreateArray(array, size);
@@ -60,7 +66,7 @@ void ChouseInputingArray(Type*& array, int32_t size, char chouse)
 		FillArray(array, size, firstElement, lastElement);
 		break;
 	default:
-		throw std::invalid_argument("wrong chouse\n");
+		throw std::invalid_argument("Wrong chouse\n");
 		break;
 	}
 }
@@ -83,5 +89,9 @@ void DeleteArray(Type*& array)
 	delete[] array;
 }
 
+
+double SumPositiveElements(double*, int32_t);
+double MultiplicationOfElements(double*, int32_t);
+void BubbleSort(double*&, int32_t);
 
 #endif
