@@ -74,6 +74,7 @@ void PrintMatrix(int32_t** matrix, int32_t rows)
 		{
 			std::cout << std::setw(5) << matrix[i][j];
 		}
+		std::cout << '\n';
 	}
 	std::cout << '\n';
 }
