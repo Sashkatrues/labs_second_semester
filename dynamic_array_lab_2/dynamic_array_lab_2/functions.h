@@ -11,11 +11,12 @@
 void InputSize(int32_t&);
 
 
-void CreateArray(int32_t*& array, int32_t size);
-void CreateArray(double*& array, int32_t size);
+//void CreateArray(int32_t*& array, int32_t size);
+//void CreateArray(double*& array, int32_t size);
 
-void InputTask(char&);
-void Task(int32_t, char);
+
+void TaskFirst(int32_t, char);
+void TaskSecond(int32_t, char);
 void InputChoose(char&);
 
 
@@ -47,6 +48,11 @@ void InputInterval(Type& firstElement, Type& lastElement)
 void FillArray(int32_t*, int32_t, int32_t, int32_t);
 void FillArray(double*, int32_t, double, double);
 
+template <class Type>
+void CreateArray(Type*& array, int32_t size)
+{
+	array = new Type[size];
+}
 
 template <class Type>
 void ChooseInputingArray(Type*& array, int32_t size, char chouse)

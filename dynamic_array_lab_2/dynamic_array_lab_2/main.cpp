@@ -8,14 +8,17 @@ int main()
 
 	try
 	{
+		std::cout << "First Task\n";
 		InputSize(size);
+		TaskFirst(size, type);
+	}
+	catch (std::invalid_argument& e) { std::cout << e.what(); }
 
-		try
-		{
-			InputTask(type);
-			Task(size, type);
-		}
-		catch (std::invalid_argument& e) { std::cout << e.what(); }
+	try
+	{
+		std::cout << "Second Task\n";
+		InputSize(size);
+		TaskSecond(size, type);
 	}
 	catch (std::invalid_argument& e) { std::cout << e.what(); }
 	system("pause");

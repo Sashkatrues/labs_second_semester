@@ -12,61 +12,49 @@ void InputSize(int32_t& size)
 }
 
 
-void InputTask(char& type)
+void TaskFirst(int32_t size1, char type)
 {
-	std::cout << "Input number of task '1' - double or '2' - int\n";
-	std::cin >> type;
-
+	char choose{};
+	double* array1 = nullptr;
+	InputChoose(choose);
+	try
+	{
+		ChooseInputingArray(array1, size1, choose);
+		PrintArray(array1, size1);
+		std::cout << "Sum of elements = " << SumPositiveElements(array1, size1) << '\n';
+		try
+		{
+			std::cout << "Multiplication = " << MultiplicationElements(array1, size1) << '\n';
+		}
+		catch (std::domain_error& e) { std::cout << e.what(); }
+		BubbleSort(array1, size1);
+		PrintArray(array1, size1);
+		DeleteArray(array1);
+	}
+	catch (std::invalid_argument& e) { std::cout << e.what(); }
 }
 
 
-void Task(int32_t size, char type)
+void TaskSecond(int32_t size, char type)
 {
-	char choose{};
+	char choose2{};
 	int32_t* array = nullptr;
-	double* array2 = nullptr;
-	switch (type)
+	InputChoose(choose2);
+	try
 	{
-	case '1':
-		InputChoose(choose);
+		ChooseInputingArray(array, size, choose2);
+		PrintArray(array, size);
+		std::cout << "Count of different elements = " << CountDifferentElements(array, size) << '\n';
 		try
 		{
-			ChooseInputingArray(array2, size, choose);
-			PrintArray(array2, size);
-			std::cout << "Sum of elements = " << SumPositiveElements(array2, size) << '\n';
-			try
-			{
-				std::cout << "Multiplication = " << MultiplicationElements(array2, size) << '\n';
-			}
-			catch (std::domain_error& e) { std::cout << e.what(); }
-			BubbleSort(array2, size);
-			PrintArray(array2, size);
-			DeleteArray(array2);
+			std::cout << "Multiplication = " << MultiplicationElements(array, size) << '\n';
 		}
-		catch (std::invalid_argument& e) { std::cout << e.what(); }
-		break;
-	case '2':
-		InputChoose(choose);
-		try
-		{
-			ChooseInputingArray(array, size, choose);
-			PrintArray(array, size);
-			std::cout << "Count of different elements = " << CountDifferentElements(array, size) << '\n';
-			try
-			{
-				std::cout << "Multiplication = " << MultiplicationElements(array, size) << '\n';
-			}
-			catch (std::domain_error& e) { std::cout << e.what(); }
-			BubbleSort(array, size);
-			PrintArray(array, size);
-			DeleteArray(array);
-		}
-		catch (std::invalid_argument& e) { std::cout << e.what(); }
-		break;
-	default:
-		throw std::invalid_argument("Impossible to complete. Wrong type\n");
-		break;
+		catch (std::domain_error& e) { std::cout << e.what(); }
+		BubbleSort(array, size);
+		PrintArray(array, size);
+		DeleteArray(array);
 	}
+	catch (std::invalid_argument& e) { std::cout << e.what(); }
 }
 
 
@@ -77,16 +65,16 @@ void InputChoose(char& choose)
 
 }
 
-void CreateArray(int32_t*& array, int32_t size)
-{
-	array = new int32_t[size];
-}
-
-
-void CreateArray(double*& array, int32_t size)
-{
-	array = new double[size];
-}
+//void CreateArray(int32_t*& array, int32_t size)
+//{
+//	array = new int32_t[size];
+//}
+//
+//
+//void CreateArray(double*& array, int32_t size)
+//{
+//	array = new double[size];
+//}
 
 
 void FillArray(int32_t* array, int32_t size, int32_t firstElement, int32_t lastElement)

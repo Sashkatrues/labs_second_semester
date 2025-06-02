@@ -3,23 +3,21 @@
 
 int main()
 {
-
 	try
 	{
 		std::cout << "Task first\n";
 		int32_t rows{};
-		std::cout << "Input rows of array\n";
+		std::cout << "Input rows of matrix\n";
 		InputSizeFirst(rows);
 		TaskFirst(rows);
 	}
 	catch (std::invalid_argument& e) { std::cout << e.what(); }
 
-
 	try
 	{
 		std::cout << "Task second\n";
 		int32_t rows{};
-		std::cout << "Input rows of array\n";
+		std::cout << "Input rows of matrix\n";
 		InputSizeSecond(rows);		
 		TaskSecond(rows);
 	}

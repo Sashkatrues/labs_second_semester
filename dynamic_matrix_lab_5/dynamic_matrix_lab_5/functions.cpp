@@ -121,7 +121,7 @@ void TaskSecond(int32_t rows)
 		ChooseInputingMatrix(matrix, rows, choose);
 		PrintMatrix(matrix, rows);
 		std::cout << "Sum lower right triangle: " << SumLowerRightTriangle(matrix, rows) << '\n';
-		std::cout << "Center spiral matrix\n";
+		std::cout << "Output center spiral matrix:\n";
 		CenterSpiralMatrix(matrix, rows);
 		DeleteMatrix(matrix, rows);
 	}

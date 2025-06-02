@@ -11,11 +11,7 @@ int main()
 		InputString(str);
 		std::cout << "Input delim\n";
 		InputString(delim);
-		try
-		{
-			FindMaxOrderWords(str, delim);
-		}
-		catch (std::invalid_argument& e) { std::cout << e.what(); }
+		FindMaxOrderWords(str, delim);
 	}
 	catch (std::invalid_argument& e) { std::cout << e.what(); }
 	DeleteString(str);
