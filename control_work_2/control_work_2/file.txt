@@ -1,0 +1,3 @@
+Ivanov A.I. ;11;7.5
+Sviatov K.D. ;12;6.8
+Kovalev J.R. ;12;7.2
