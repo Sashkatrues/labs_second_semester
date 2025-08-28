@@ -1,0 +1,7 @@
+3 3 ivanov 6 7 8
+3 2 gradov 7 4 9
+4 2 filenko 6 8 9
+1 3 makarov 7 2 10
+2 4 sidorov 1 2 3
+1 5 novikov 5 8 8
+4 1 petrov 3 6 9
