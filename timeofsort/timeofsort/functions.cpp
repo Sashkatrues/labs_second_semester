@@ -1,4 +1,6 @@
 #include "header.h"
+#include "sort.h"
+
 
 bool operator<(const Student& arr, const Student& b)
 {
