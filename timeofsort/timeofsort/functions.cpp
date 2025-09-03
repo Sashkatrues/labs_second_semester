@@ -43,6 +43,31 @@ bool operator<<(std::ostream& out, const Student& arr)
     return 0;
 }
 
+void CheckInputFile(std::ifstream& fin)
+{
+    if (!fin.good())
+    {
+        throw "file doesn't exist\n";
+    }
+    if (!fin)
+    {
+        throw "input file error\n";
+    }
+    if (fin.peek() == EOF)
+    {
+        throw "file is empty\n";
+    }
+}
+
+
+void CheckOutputFile(std::ofstream& fout)
+{
+    if (!fout)
+    {
+        throw "output file error\n";
+    }
+}
+
 void InputChoice(int32_t& choice)
 {
     std::cout << "input choice: 1 - direct input and output to file;\n2 - generation of data random and output to file;\n3 - input from file and output to console\n";
@@ -191,32 +216,34 @@ void InputFromConsole(Student* arr, int32_t size) {
     }
 }
 void ReadFromFile(std::string& filename, Student* arr, int32_t size) {
-    std::ifstream in(filename);
+    std::ifstream fin(filename);
+    CheckInputFile(fin);
     for (int32_t i{}; i < size; ++i)
     {
-        in >> arr[i].course >> arr[i].group;
-        in.ignore();
-        std::getline(in, arr[i].name, ' ');
+        fin >> arr[i].course >> arr[i].group;
+        fin.ignore();
+        std::getline(fin, arr[i].name, ' ');
         for (int32_t j{}; j < 3; ++j)
         {
-            in >> arr[i].grades[j];
+            fin >> arr[i].grades[j];
         }
     }
-    in.close();
+    fin.close();
 }
 void WriteToFile(std::string& filename, Student* arr, int32_t size)
 {
-    std::ofstream out(filename);
+    std::ofstream fout(filename);
+    CheckOutputFile(fout);
     for (int32_t i{}; i < size; ++i)
     {
-        out << arr[i].course << " " << arr[i].group << " " << arr[i].name << " ";
+        fout << arr[i].course << " " << arr[i].group << " " << arr[i].name << " ";
         for (int32_t j{}; j < 3; ++j)
         {
-            out << arr[i].grades[j] << " ";
+            fout << arr[i].grades[j] << " ";
         }
-        out << "\n";
+        fout << "\n";
     }
-    out.close();
+    fout.close();
 }
 
 void InputInterval(int32_t& firstElement, int32_t& lastElement)
@@ -296,22 +323,22 @@ void GenerateRandom(char* arr, int32_t size) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int32_t> dist(static_cast<int>(firstElement), static_cast<int>(lastElement));
-    for (size_t i = 0; i < size; ++i)
+    for (size_t i{}; i < size; ++i)
     {
         arr[i] = static_cast<char>(dist(gen));
     }
 }
 void GenerateRandom(std::string* arr, int32_t size) {
-    for (int32_t i = 0; i < size; ++i) {
+    for (int32_t i{}; i < size; ++i) {
         arr[i] = GenerateRandomStr();
     }
 }
 std::string GenerateRandomStr() {
-    std::cout << "extrim values of length\n";
+    std::cout << "extreme values of length\n";
     int32_t firstElement{};
     int32_t lastElement{};
     InputInterval(firstElement, lastElement);
-    std::cout << "extrim values of letters\n";
+    std::cout << "extreme values of letters\n";
     char firstLetter{};
     char lastLetter{};
     InputInterval(firstLetter, lastLetter);
@@ -330,12 +357,14 @@ std::string GenerateRandomStr() {
 void GenerateRandom(Student* arr, int32_t size) {
     int32_t firstElement{};
     int32_t lastElement{};
+    std::cout << "extreme values of course, group and grades\n";
     InputInterval(firstElement, lastElement);
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int32_t> dist(firstElement, lastElement);
     for (int32_t i{}; i < size; ++i)
     {
+        std::cout << "student " << i + 1 << ":\n";
         arr[i].name = GenerateRandomStr();
         arr[i].course = dist(gen);
         arr[i].group = dist(gen);
