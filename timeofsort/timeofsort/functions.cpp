@@ -1,5 +1,48 @@
 #include "header.h"
 
+bool operator<(const Student& arr, const Student& b)
+{
+    if (arr.course == b.course)
+    {
+        if (arr.group == b.group)
+        {
+
+            return arr.group < b.group;
+        }
+        else
+        {
+            return arr.name < b.name;
+        }
+    }
+    return arr.course < b.course;
+
+}
+bool operator>(const Student& arr, const Student& b)
+{
+    if (arr.course == b.course)
+    {
+        if (arr.group == b.group)
+        {
+
+            return arr.group > b.group;
+        }
+        else
+        {
+            return arr.name > b.name;
+        }
+    }
+    return arr.course > b.course;
+}
+bool operator==(const Student& arr, const Student& b)
+{
+    return arr.course == b.course && arr.group == b.group && arr.name == b.name;
+}
+bool operator<<(std::ostream& out, const Student& arr)
+{
+    out << arr.name << ';' << arr.group << ';' << arr.course << '\t';
+    return 0;
+}
+
 void InputChoice(int32_t& choice)
 {
     std::cout << "input choice: 1 - direct input and output to file;\n2 - generation of data random and output to file;\n3 - input from file and output to console\n";
@@ -29,7 +72,7 @@ void InputFileName(std::string& fileName)
 bool ChouseSort()
 {
     bool sort;
-    std::cout << "Choose type of sort 1) ascending 0) descending\n";
+    std::cout << "Choose type of sort: 1 - ascending 0 - descending\n";
     std::cin >> sort;
     return sort;
 }
@@ -39,6 +82,7 @@ void ChouseTypeOfSort(int32_t& typeOfSort)
         << "6 - mergesort;\n7 - cocktailsort;\n8 - countsort;\n9 - bogosort\n";
     std::cin >> typeOfSort;
 }
+
 void ChouseType(char type)
 {
     switch (type)
