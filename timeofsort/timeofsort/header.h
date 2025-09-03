@@ -22,6 +22,11 @@ bool operator>(const Student& a, const Student& b);
 bool operator==(const Student& a, const Student& b);
 bool operator<<(std::ostream& out, const Student& a);
 
+
+void CheckInputFile(std::ifstream& fin);
+void CheckOutputFile(std::ofstream& fout);
+
+
 void InputChoice(int32_t&);
 void InputType(char& type);
 void InputFileName(std::string& fileName);
@@ -59,21 +64,23 @@ int32_t CountSize(T* arr, std::string& fileName)
 
 template<typename T>
 void ReadFromFile(std::string& filename, T* arr, int32_t size) {
-	std::ifstream in(filename);
+	std::ifstream fin(filename);
+	CheckInputFile(fin);
 	for (int32_t i{}; i < size; ++i)
 	{
-		in >> arr[i];
+		fin >> arr[i];
 	}
-	in.close();
+	fin.close();
 }
 template<typename T>
 void WriteToFile(std::string& filename, T* arr, int32_t size) {
-	std::ofstream out(filename);
+	std::ofstream fout(filename);
+	CheckOutputFile(fout);
 	for (int32_t i{}; i < size; ++i)
 	{
-		out << arr[i] << "\n";
+		fout << arr[i] << " ";
 	}
-	out.close();
+	fout.close();
 }
 template<typename T>
 void InputFromConsole(T* arr, int32_t size)
@@ -338,73 +345,81 @@ void CocktailSort(T* arr, int32_t size, bool sort)
 		++left;
 	}
 }
-//template <typename T>
-//T FindMin(T* arr, int32_t size)
-//{
-//	T min = arr[0];
-//	for (int32_t i{}; i < size; ++i)
-//	{
-//		if (arr[i] < min)
-//		{
-//			min = arr[i];
-//		}
-//	}
-//	return min;
-//}
-//template <typename T>
-//T FindMax(T* arr, int32_t size)
-//{
-//	T max = arr[0];
-//	for (int32_t i{}; i < size; ++i)
-//	{
-//		if (arr[i] > max)
-//		{
-//			max = arr[i];
-//		}
-//	}
-//	return max;
-//}
-//template <typename T>
-//void CountSort(T* arr, int32_t size, bool sort)
-//{
-//	ShowArray(arr, size);
-//	T min{ FindMin(arr,size) };
-//	T max{ FindMax(arr,size) };
-//	int32_tT range{ static_cast<int32_t>(max) + 1 };
-//	T* counter = new T[range];
-//	for (int32_t i{}; i < range; ++i)
-//	{
-//		counter[i] = 0;
-//	}
-//	for (int32_t i{}; i < size; ++i)
-//	{
-//		counter[static_cast<int32_t>(arr[i])]++;
-//	}
-//	int32_t k{};
-//	if (sort) {
-//		for (int32_t i{}; i < range; ++i)
-//		{
-//			while (counter[i] > 0)
-//			{
-//				--counter[i];
-//				arr[k++] = i;
-//				ShowArray(arr, size);
-//			}
-//		}
-//	}
-//	else
-//	{
-//		for (int32_t i{ range - 1 }; i > 0; --i)
-//		{
-//			while (counter[i] > 0)
-//			{
-//				--counter[i];
-//				arr[k++] = i;
-//				ShowArray(arr, size);
-//			}
-//		}
-//	}
-//}
+template <typename T>
+T FindMin(T* arr, int32_t size)
+{
+	T min = arr[0];
+	for (int32_t i{1}; i < size; ++i)
+	{
+		if (arr[i] < min)
+		{
+			min = arr[i];
+		}
+	}
+	return min;
+}
+template <typename T>
+T FindMax(T* arr, int32_t size)
+{
+	T max = arr[0];
+	for (int32_t i{1}; i < size; ++i)
+	{
+		if (arr[i] > max)
+		{
+			max = arr[i];
+		}
+	}
+	return max;
+}
+template <typename T>
+void CountSort(T* arr, int32_t size, bool sort)
+{
+	if constexpr (std::is_same_v<T, int> || std::is_same_v<T, char>)
+	{
+		ShowArray(arr, size);
+		T min{ FindMin(arr,size) };
+		T max{ FindMax(arr,size) };
+		int32_t range{ static_cast<int32_t>(max) - static_cast<int32_t>(min) + 1 };
+		T* counter = new T[range];
+		for (int32_t i{}; i < range; ++i)
+		{
+			counter[i] = 0;
+		}
+		for (int32_t i{}; i < size; ++i)
+		{
+			++counter[static_cast<int32_t>(arr[i]) - static_cast<int32_t>(min)];
+		}
+		int32_t k{};
+		if (sort) {
+			for (int32_t i{}; i < range; ++i)
+			{
+				while (counter[i] > 0)
+				{
+					counter[i]--;
+					arr[k++] = i + static_cast<int32_t>(min);
+					ShowArray(arr, size);
+				}
+			}
+		}
+		else
+		{
+			for (int32_t i{ range - 1 }; i >= 0; --i)
+			{
+				while (counter[i] > 0)
+				{
+					counter[i]--;
+					arr[k++] = i + static_cast<int32_t>(min);
+					ShowArray(arr, size);
+				}
+			}
+		}
+		delete[] counter;
+	}
+	else
+	{
+		throw std::invalid_argument("unsupported array type\n");
+	}
+}
 template <class T>
 bool IsSorted(T* arr, int32_t size)
 {
@@ -532,7 +547,7 @@ void SortArray(T* arr, int32_t size)
 		std::cout << "Sort worked: " << time.count() << " seconds\n";
 		break;
 	}
-	/*case 8:
+	case 8:
 	{
 		bool sort{ ChouseSort() };
 		auto start = std::chrono::high_resolution_clock::now();
@@ -541,7 +556,7 @@ void SortArray(T* arr, int32_t size)
 		std::chrono::duration<double> time = end - start;
 		std::cout << "Sort worked: " << time.count() << " seconds\n";
 		break;
-	}*/
+	}
 	case 9:
 	{
 		bool sort{ ChouseSort() };
