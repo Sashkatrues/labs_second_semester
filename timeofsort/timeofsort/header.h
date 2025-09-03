@@ -8,15 +8,19 @@
 #include <cstdlib>
 #include <ctime>
 #include <random>
-#include "header.h";
 #include <chrono>
 
 struct Student {
-	int course;
-	int group;
+	int32_t course;
+	int32_t group;
 	std::string name;
-	int grades[3];
+	int32_t grades[3];
 };
+
+bool operator<(const Student& a, const Student& b);
+bool operator>(const Student& a, const Student& b);
+bool operator==(const Student& a, const Student& b);
+bool operator<<(std::ostream& out, const Student& a);
 
 void InputChoice(int32_t&);
 void InputType(char& type);
@@ -36,62 +40,6 @@ void ShowArray(T* arr, int32_t size)
 	std::cout << '\n';
 }
 void ShowArray(Student* arr, int32_t size);
-
-
-void BubbleSort(int32_t* arr, int32_t size, bool sort);
-void BubbleSort(double* arr, int32_t size, bool sort);
-void BubbleSort(char* arr, int32_t size, bool sort);
-void BubbleSort(std::string* arr, int32_t size, bool sort);
-void BubbleSort(Student* arr, int32_t size, bool sort);
-
-void CombSort(int32_t* arr, int32_t size, bool sort);
-void CombSort(double* arr, int32_t size, bool sort);
-void CombSort(char* arr, int32_t size, bool sort);
-void CombSort(std::string* arr, int32_t size, bool sort);
-void CombSort(Student* arr, int32_t size, bool sort);
-
-void InsertionSort(int32_t* arr, int32_t size, bool sort);
-void InsertionSort(double* arr, int32_t size, bool sort);
-void InsertionSort(char* arr, int32_t size, bool sort);
-void InsertionSort(std::string* arr, int32_t size, bool sort);
-void InsertionSort(Student* arr, int32_t size, bool sort);
-
-int32_t GetSmallOfBegin(int32_t* arr, int32_t i, int32_t size);
-int32_t GetSmallOfBegin(double* arr, int32_t i, int32_t size);
-int32_t GetSmallOfBegin(char* arr, int32_t i, int32_t size);
-int32_t GetSmallOfBegin(std::string* arr, int32_t i, int32_t size);
-int32_t GetSmallOfBegin(Student* arr, int32_t i, int32_t size);
-
-int32_t GetSmallOfEnd(int32_t* arr, int32_t i, int32_t size);
-int32_t GetSmallOfEnd(double* arr, int32_t i, int32_t size);
-int32_t GetSmallOfEnd(char* arr, int32_t i, int32_t size);
-int32_t GetSmallOfEnd(std::string* arr, int32_t i, int32_t size);
-int32_t GetSmallOfEnd(Student* arr, int32_t i, int32_t size);
-
-int32_t Divide(int32_t* arr, int32_t start, int32_t sup_elem, int32_t size, bool sort);
-int32_t Divide(double* arr, int32_t start, int32_t sup_elem, int32_t size, bool sort);
-int32_t Divide(char* arr, int32_t start, int32_t sup_elem, int32_t size, bool sort);
-int32_t Divide(std::string* arr, int32_t start, int32_t sup_elem, int32_t size, bool sort);
-int32_t Divide(Student* arr, int32_t start, int32_t sup_elem, int32_t size, bool sort);
-
-void CocktailSort(int32_t* arr, int32_t size, bool sort);
-void CocktailSort(double* arr, int32_t size, bool sort);
-void CocktailSort(char* arr, int32_t size, bool sort);
-void CocktailSort(std::string* arr, int32_t size, bool sort);
-void CocktailSort(Student* arr, int32_t size, bool sort);
-
-void Merge(int32_t* arr, int32_t start, int32_t end, int32_t mid, bool sort);
-void Merge(double* arr, int32_t start, int32_t end, int32_t mid, bool sort);
-void Merge(char* arr, int32_t start, int32_t end, int32_t mid, bool sort);
-void Merge(std::string* arr, int32_t start, int32_t end, int32_t mid, bool sort);
-void Merge(Student* arr, int32_t start, int32_t end, int32_t mid, bool sort);
-
-bool IsSorted(int32_t* arr, int32_t size);
-bool IsSorted(double* arr, int32_t size);
-bool IsSorted(char* arr, int32_t size);
-bool IsSorted(std::string* arr, int32_t size);
-bool IsSorted(Student* arr, int32_t size);
-
 
 void InputSize(int32_t& size);
 template <typename T>
@@ -150,15 +98,100 @@ void GenerateRandom(std::string* arr, int32_t size);
 void GenerateRandom(Student* arr, int32_t size);
 
 
+
+template <typename T>
+void BubbleSort(T* arr, int32_t size, bool sort)
+{
+	bool swap{ false };
+	for (int32_t i{}; i < size; ++i)
+	{
+		swap = false;
+		for (int32_t j{}; j < size - i - 1; ++j)
+		{
+			if ((arr[j] > arr[j + 1]) ^ sort)
+			{
+				std::swap(arr[j], arr[j + 1]);
+				swap = true;
+			}
+		}
+		if (!swap)
+		{
+			break;
+		}
+		ShowArray(arr, size);
+	}
+	ShowArray(arr, size);
+}
+template <typename T>
+void CombSort(T* arr, int32_t size, bool sort)
+{
+	int32_t step{ size * 4 / 5 };
+	bool swap{ false };
+	while (step > 1 || swap) {
+		if (step < 1)
+		{
+			step = 1;
+			swap = false;
+		}
+		for (int32_t i{}; i + step < size; ++i)
+		{
+			if ((arr[i] > arr[i + step]) ^ sort)
+			{
+				std::swap(arr[i], arr[i + step]);
+				swap = true;
+			}
+		}
+		ShowArray(arr, size);
+		step = step * 4 / 5;
+	}
+}
+template<typename T>
+void InsertionSort(T* arr, int32_t size, bool sort)
+{
+	ShowArray(arr, size);
+	for (int32_t i{ 1 }; i < size; i++)
+	{
+		int32_t j{ i - 1 };
+
+		while (j >= 0 && (arr[j] > arr[j + 1]) ^ sort)
+		{
+			std::swap(arr[j], arr[j + 1]);
+			--j;
+			ShowArray(arr, size);
+		}
+	}
+}
+template<typename T>
+int32_t GetSmallOfBegin(T* arr, int32_t i, int32_t size)
+{
+	int32_t position{ i };
+	for (int32_t k{ i }; k < size; ++k)
+	{
+		if (arr[k] < arr[position])
+			position = k;
+	}
+	return position;
+}
+template<typename T>
+int32_t GetSmallOfEnd(T* arr, int32_t i)
+{
+	int32_t position{ i };
+	for (int32_t k{}; k <= i; ++k)
+	{
+		if (arr[k] < arr[position])
+			position = k;
+	}
+	return position;
+}
 template<typename T>
 void SelectionSort(T* arr, int32_t size, bool sort)
 {
 	if (sort)
 	{
-		for (int32_t i{ 0 }; i < size; ++i)
+		for (int32_t i{}; i < size; ++i)
 		{
-			int32_t small_pos{ GetSmallOfBegin(arr, i, size) };
-			std::swap(arr[i], arr[small_pos]);
+			int32_t small_position{ GetSmallOfBegin(arr, i, size) };
+			std::swap(arr[i], arr[small_position]);
 			ShowArray(arr, size);
 		}
 	}
@@ -166,34 +199,143 @@ void SelectionSort(T* arr, int32_t size, bool sort)
 	{
 		for (int32_t i{ size - 1 }; i >= 0; --i)
 		{
-			int32_t small_pos{ GetSmallOfEnd(arr, i, size) };
-			std::swap(arr[i], arr[small_pos]);
+			int32_t small_position{ GetSmallOfEnd(arr, i) };
+			std::swap(arr[i], arr[small_position]);
 			ShowArray(arr, size);
 		}
 	}
 }
 template<typename T>
-void QuickSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
+int32_t Divide(T* arr, int32_t start, int32_t sup_elem, bool sort, int32_t size)
+{
+	int32_t i{ start };
+
+	while (i < sup_elem)
+	{
+		if ((arr[i] > arr[sup_elem]) ^ sort && i == sup_elem - 1)
+		{
+			std::swap(arr[i], arr[sup_elem]);
+			--sup_elem;
+			ShowArray(arr, size);
+		}
+		else if ((arr[i] > arr[sup_elem]) ^ sort)
+		{
+			std::swap(arr[sup_elem - 1], arr[sup_elem]);
+			std::swap(arr[i], arr[sup_elem]);
+			--sup_elem;
+			ShowArray(arr, size);
+		}
+		else
+		{
+			++i;
+		}
+	}
+
+	return sup_elem;
+}
+template<typename T>
+void QuickSortInside(T* arr, int32_t start, int32_t end, bool sort, int32_t size)
 {
 	if (start < end)
 	{
-		int32_t sup_elem = Divide(arr, start, end, size, sort);
-		QuickSort(arr, start, sup_elem - 1, size, sort);
-		QuickSort(arr, sup_elem + 1, end, size, sort);
+		int32_t sup_elem = Divide(arr, start, end, sort, size);
+		ShowArray(arr, size);
+		QuickSortInside(arr, start, sup_elem - 1, sort, size);
+		QuickSortInside(arr, sup_elem + 1, end, sort, size);
 	}
 }
 template<typename T>
-void MergeSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
+void QuickSort(T* arr, int32_t size, bool sort)
+{
+	int32_t start{};
+	int32_t end{ size - 1 };
+	QuickSortInside(arr, start, end, sort, size);
+}
+template<typename T>
+void Merge(T* arr, int32_t start, int32_t end, int32_t mid, bool sort)
+{
+	T* merge_array{ new T[end + 1] };
+	int32_t i{ start };
+	int32_t k{ start };
+	int32_t j{ mid + 1 };
+	while (i <= mid && j <= end)
+	{
+		if ((arr[i] < arr[j]) ^ sort)
+		{
+			merge_array[k++] = arr[i++];
+		}
+		else
+		{
+			merge_array[k++] = arr[j++];
+		}
+	}
+
+	while (i <= mid)
+	{
+		merge_array[k++] = arr[i++];
+	}
+
+	while (j <= end)
+	{
+		merge_array[k++] = arr[j++];
+	}
+
+	for (i = start; i < k; ++i)
+	{
+		arr[i] = merge_array[i];
+	}
+}
+template<typename T>
+void MergeSortInside(T* arr, int32_t start, int32_t end, bool sort, int32_t size)
 {
 	int32_t mid{};
 	if (start < end)
 	{
 
 		mid = (start + end) / 2;
-		MergeSort(arr, start, mid, size, sort);
-		MergeSort(arr, mid + 1, end, size, sort);
+		MergeSortInside(arr, start, mid, sort, size);
+		MergeSortInside(arr, mid + 1, end, sort, size);
 		Merge(arr, start, end, mid, sort);
 		ShowArray(arr, size);
+	}
+}
+template<typename T>
+void MergeSort(T* arr, int32_t size, bool sort)
+{
+	int32_t start{};
+	int32_t end{ size - 1 };
+	MergeSortInside(arr, start, end, sort, size);
+}
+template<typename T>
+void CocktailSort(T* arr, int32_t size, bool sort)
+{
+	ShowArray(arr, size);
+	int32_t left{};
+	int32_t right{ size };
+	bool swap{ true };
+	while (swap)
+	{
+		swap = false;
+		for (int32_t i{ left }; i < right - 1; ++i)
+		{
+			if ((arr[i] > arr[i + 1]) ^ sort)
+			{
+				std::swap(arr[i], arr[i + 1]);
+				swap = true;
+				ShowArray(arr, size);
+			}
+		}
+		--right;
+		for (int32_t i{ right }; i > left; --i)
+		{
+			if ((arr[i] < arr[i - 1]) ^ sort)
+			{
+				std::swap(arr[i], arr[i - 1]);
+				swap = true;
+				ShowArray(arr, size);
+			}
+		}
+		++left;
 	}
 }
 //template <typename T>
@@ -209,7 +351,6 @@ void MergeSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
 //	}
 //	return min;
 //}
-//
 //template <typename T>
 //T FindMax(T* arr, int32_t size)
 //{
@@ -223,13 +364,13 @@ void MergeSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
 //	}
 //	return max;
 //}
-//
 //template <typename T>
-//void CountSort(T*& arr, int32_t size)
+//void CountSort(T* arr, int32_t size, bool sort)
 //{
+//	ShowArray(arr, size);
 //	T min{ FindMin(arr,size) };
 //	T max{ FindMax(arr,size) };
-//	int32_t range{ static_cast<int32_t>(max) + 1 };
+//	int32_tT range{ static_cast<int32_t>(max) + 1 };
 //	T* counter = new T[range];
 //	for (int32_t i{}; i < range; ++i)
 //	{
@@ -240,7 +381,7 @@ void MergeSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
 //		counter[static_cast<int32_t>(arr[i])]++;
 //	}
 //	int32_t k{};
-//	if (ChouseSort()) {
+//	if (sort) {
 //		for (int32_t i{}; i < range; ++i)
 //		{
 //			while (counter[i] > 0)
@@ -265,6 +406,18 @@ void MergeSort(T* arr, int32_t start, int32_t end, int32_t size, bool sort)
 //	}
 //}
 template <class T>
+bool IsSorted(T* arr, int32_t size)
+{
+	for (int32_t i{ 1 }; i < size; ++i)
+	{
+		if (arr[i - 1] > arr[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+template <class T>
 void ShuffleElements(T* arr, int32_t size)
 {
 	int32_t j{};
@@ -273,18 +426,17 @@ void ShuffleElements(T* arr, int32_t size)
 	for (int32_t i{}; i < size; ++i)
 	{
 		j = rand() % size;
-		temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
+		std::swap(arr[i], arr[j]);
 	}
 }
 template <class T>
 void BogoSort(T* arr, int32_t size, bool sort)
 {
 	ShowArray(arr, size);
+	srand(static_cast<unsigned>(time(0)));
 	if (sort)
 	{
-		srand(static_cast<unsigned>(time(0)));
+
 		while (!IsSorted(arr, size))
 		{
 			ShuffleElements(arr, size);
@@ -293,7 +445,6 @@ void BogoSort(T* arr, int32_t size, bool sort)
 	}
 	else
 	{
-		srand(static_cast<unsigned>(time(0)));
 		while (IsSorted(arr, size))
 		{
 			ShuffleElements(arr, size);
@@ -301,7 +452,6 @@ void BogoSort(T* arr, int32_t size, bool sort)
 		}
 	}
 }
-
 
 template <typename T>
 void SortArray(T* arr, int32_t size)
@@ -356,7 +506,7 @@ void SortArray(T* arr, int32_t size)
 		bool sort{ ChouseSort() };
 		ShowArray(arr, size);
 		auto start = std::chrono::high_resolution_clock::now();
-		QuickSort(arr, 0, size - 1, size, sort);
+		QuickSort(arr, size, sort);
 		auto end = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> time = end - start;
 		std::cout << "Sort worked: " << time.count() << " seconds\n";
@@ -366,7 +516,7 @@ void SortArray(T* arr, int32_t size)
 	{
 		bool sort{ ChouseSort() };
 		auto start = std::chrono::high_resolution_clock::now();
-		MergeSort(arr, 0, size - 1, size, sort);
+		MergeSort(arr, size, sort);
 		auto end = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> time = end - start;
 		std::cout << "Sort worked: " << time.count() << " seconds\n";
@@ -384,8 +534,9 @@ void SortArray(T* arr, int32_t size)
 	}
 	/*case 8:
 	{
+		bool sort{ ChouseSort() };
 		auto start = std::chrono::high_resolution_clock::now();
-		CountSort(arr, size);
+		CountSort(arr, size, sort);
 		auto end = std::chrono::high_resolution_clock::now();
 		std::chrono::duration<double> time = end - start;
 		std::cout << "Sort worked: " << time.count() << " seconds\n";
@@ -464,6 +615,5 @@ void ChouseInputAndOutput(int32_t choice, T* arr)
 	}
 	}
 }
-
 
 #endif
