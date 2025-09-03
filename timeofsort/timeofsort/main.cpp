@@ -4,8 +4,12 @@
 int main()
 {
 	char type{};
-	InputType(type);
-	ChouseType(type);
+	try
+	{
+		InputType(type);
+		ChouseType(type);
+	}
+	catch (std::invalid_argument& e) { std::cout << e.what(); }
 	system("pause");
 	return 0;
 }
