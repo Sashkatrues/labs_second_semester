@@ -101,7 +101,7 @@ int32_t GetSmallOfEnd(T* arr, int32_t i)
 template<typename T>
 void SelectionSort(T* arr, int32_t size, bool sort)
 {
-	if (sort)
+	if (!sort)
 	{
 		for (int32_t i{}; i < size; ++i)
 		{
