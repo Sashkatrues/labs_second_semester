@@ -99,7 +99,7 @@ void InputFileName(std::string& fileName)
 bool ChouseSort()
 {
     bool sort;
-    std::cout << "Choose type of sort: 1 - ascending 0 - descending\n";
+    std::cout << "Choose type of sort: 0 - ascending; 1 - descending\n";
     std::cin >> sort;
     return sort;
 }
